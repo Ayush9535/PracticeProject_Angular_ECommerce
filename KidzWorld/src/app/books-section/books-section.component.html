@@ -1,0 +1,22 @@
+<div class="section-container flex">
+    <div class="section">
+      <h2>Discover New Books</h2>
+      <div class="container">
+        <div *ngFor="let book of books">
+          <div>
+            <img class="books" src="/assets/book1.png" alt="" />
+            <h3>{{book.title}}</h3>
+            <h4>{{book.author}}</h4>
+          </div>
+          <div class="buy flex space-between">
+            <p>${{book.price.displayValue}}</p>
+            <div id="book1" class="button flex space-evenly" (click)="addToCartClicked(book)">
+              <h6>Add</h6>
+              <img src="/assets/cart-icon-white.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
