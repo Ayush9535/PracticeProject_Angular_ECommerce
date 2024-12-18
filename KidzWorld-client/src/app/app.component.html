@@ -1,0 +1,6 @@
+<app-navbar *ngIf="!['/signin', '/signup'].includes(path)"></app-navbar>
+<app-hero-section *ngIf="!['/signin', '/signup', '/checkout'].includes(path)"></app-hero-section>
+
+<router-outlet></router-outlet>
+
+<app-footer *ngIf="!['/signin', '/signup'].includes(path)"></app-footer>

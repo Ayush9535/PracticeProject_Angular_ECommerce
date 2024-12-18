@@ -1,0 +1,21 @@
+<div class="px-20 w-full flex flex-col justify-center items-center">
+  <h2 class="self-start text-2xl my-5 font-medium">Discover New Books</h2>
+  <div class="grid grid-cols-6 content-center w-full">
+    <div *ngFor="let book of books" class="w-full gap-3">
+      <div>
+        <img class="books" src={{book.imgUrl}} alt="" width="200px"/>
+        <h3 class="text-xl font-medium px-1 text-ellipsis overflow-hidden whitespace-nowrap w-[200px]">{{book.title}}</h3>
+        <h4 class="text-md mb-3 px-1 text-gray-400">{{book.description}}</h4>
+      </div>
+      <div class="flex justify-between items-center px-1 w-[200px]">
+        <h4 class="text-lg font-semibold">${{book.price}}</h4>
+        <div id="book1" class="bg-blue-500 rounded-md flex justify-evenly items-center gap-1 p-1 px-2 text-white cursor-pointer"
+          (click)="addToCartClicked(book)">
+          <h6 class="font-bold">Add</h6>
+          <img src="/assets/cart-icon-white.png" alt="" width="20px" class="h-[20px]" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <h2 class="self-end p-2 px-2 text-md bg-blue-500 rounded-md text-white w-fit mt-10 mr-6 cursor-pointer" [routerLink]="['/products', 'books']">Explore More</h2>
+</div>

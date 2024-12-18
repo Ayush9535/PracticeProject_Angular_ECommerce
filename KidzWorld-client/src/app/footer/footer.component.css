@@ -1,0 +1,61 @@
+/* product-page.component.scss */
+:host {
+    display: block;
+  }
+  
+  /* Custom scrollbar for product details */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Image zoom effect */
+  .product-image:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  
+  /* Smooth transitions */
+  .tab-content {
+    transition: all 0.3s ease;
+  }
+  
+  button {
+    transition: all 0.2s ease;
+  }
+  
+  /* Responsive font sizes */
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  :host {
+    display: block;
+  }
+  
+  .product-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .product-images {
+      max-width: 100%;
+      margin-bottom: 2rem;
+    }
+  }

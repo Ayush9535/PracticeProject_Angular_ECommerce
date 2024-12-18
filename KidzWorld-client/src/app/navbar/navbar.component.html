@@ -1,0 +1,16 @@
+<nav class="flex justify-between items-center px-20 py-3">
+    <div>
+      <img src="/assets/kw-logo.png" width="200px" routerLink="/home" class="cursor-pointer"/>
+    </div>
+    <div class="flex justify-between items-center">
+      <h2 routerLink="/myorders" class="myordersbtn">My Orders</h2>
+      <div id="cart" class="flex cursor-pointer" routerLink="/cart">
+        <img src="/assets/cart-icon.png" alt="" width="30px" />
+        <p class="font-semibold text-md" >Cart</p>
+      </div>
+      <div>
+        <button class="p-2 flex justify-evenly ml-[30px] items-center bg-blue-600 rounded-md text-white" (click)="navigateToSignIn()" *ngIf="loggedIn == false">Sign in</button>
+        <button class="p-2 flex justify-evenly ml-[30px] items-center bg-blue-600 rounded-md text-white" (click)="logout()" *ngIf="loggedIn == true">Log Out</button>
+      </div>
+    </div>
+  </nav>
