@@ -8,12 +8,18 @@ export class CookieServiceService {
   constructor() { }
 
   setCookie(name: string, value: string, days: number) {
+
+    sessionStorage.setItem(name, value);
+
     const expires = new Date();
     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
     document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; secure; SameSite=Strict`;
   }
 
   getCookie(name: string): string | null {
+
+    return sessionStorage.getItem(name);
+
     const nameEQ = name + "=";
     const ca = document.cookie.split(';');
     for (let i = 0; i < ca.length; i++) {
@@ -25,6 +31,7 @@ export class CookieServiceService {
   }
 
   isLoggedIn(): boolean {
+    return sessionStorage.getItem('JWT') !== null;
     return this.getCookie('JWT') !== null;
   }
 
@@ -34,6 +41,7 @@ export class CookieServiceService {
   }
 
   deleteCookie(name: string) {
+    sessionStorage.removeItem(name);
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
   }
 
