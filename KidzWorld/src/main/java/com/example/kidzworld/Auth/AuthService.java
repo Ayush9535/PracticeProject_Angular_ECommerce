@@ -40,7 +40,7 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(email);
         Cookie cookie = new Cookie("JWT", token);
-        cookie.setHttpOnly(false);
+        cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(3600);
