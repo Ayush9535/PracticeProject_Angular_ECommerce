@@ -10,7 +10,7 @@ export class CookieServiceService {
   setCookie(name: string, value: string, days: number) {
     const expires = new Date();
     expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; secure; HttpOnly; SameSite=None`;
+    document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; secure; HttpOnly; SameSite=Strict`;
   }
 
   getCookie(name: string): string | null {
