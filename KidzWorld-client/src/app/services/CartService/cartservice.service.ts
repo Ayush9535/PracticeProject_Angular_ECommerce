@@ -58,15 +58,15 @@ export class CartserviceService {
   }
 
   getSavedAddress(): Observable<Address[]> {
-    return this.http.get<Address[]>('http://localhost:8080/getSavedAddresses', { headers: this.getHeaders() });
+    return this.http.get<Address[]>(`${environment.apiUrl}/getSavedAddresses`, { headers: this.getHeaders() });
   } 
 
   addSavedAddress(address: Address): Observable<CartResponse> {
-    return this.http.post<CartResponse>('http://localhost:8080/addSavedAddress', address, { headers: this.getHeaders() });
+    return this.http.post<CartResponse>(`${environment.apiUrl}/addSavedAddress`, address, { headers: this.getHeaders() });
   }
 
   removeSavedAddress(address: Address): Observable<CartResponse> {
-    return this.http.post<CartResponse>(`http://localhost:8080/removeSavedAddress`, address, { headers: this.getHeaders() });
+    return this.http.post<CartResponse>(`${environment.apiUrl}/removeSavedAddress`, address, { headers: this.getHeaders() });
   }
 
 }
