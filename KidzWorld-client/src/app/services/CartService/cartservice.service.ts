@@ -6,16 +6,17 @@ import { Product } from '../ProductService/productservice.service';
 import { CartResponse } from '../../interfaces/CartResponse';
 import CartItem from '../../interfaces/CartItem';
 import Address from '../../interfaces/address';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartserviceService {
-  private cartUrl = 'http://localhost:8080/getCart';  
-  private addToCartUrl = 'http://localhost:8080/addToCart'; 
-  private removeFromCartUrl = 'http://localhost:8080/removeFromCart'; 
-  private removeCompletelyFromCartUrl = 'http://localhost:8080/removeCompletelyFromCart'; 
-  private clearCartUrl = 'http://localhost:8080/clearCart';  
+  private cartUrl = environment.apiUrl + '/getCart';  
+  private addToCartUrl = environment.apiUrl + '/addToCart'; 
+  private removeFromCartUrl = environment.apiUrl + '/removeFromCart'; 
+  private removeCompletelyFromCartUrl = environment.apiUrl + '/removeCompletelyFromCart'; 
+  private clearCartUrl = environment.apiUrl + '/clearCart';  
 
   private cart: CartItem[] = [];
 

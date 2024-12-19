@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieServiceService } from '../CookieService/cookie-service.service';
+import { environment } from '../../../environments/environment';
 
 export interface Product {
   id: string;
@@ -17,7 +18,7 @@ export interface Product {
 })
 export class ProductserviceService {
 
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = environment.apiUrl;
 
   
   private token = this.cookieSvc.getCookie('JWT');

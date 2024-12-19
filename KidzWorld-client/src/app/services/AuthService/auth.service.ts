@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { CookieServiceService } from '../CookieService/cookie-service.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/auth'; 
+  private apiUrl = environment.apiUrl + '/auth'; 
 
   constructor(private http: HttpClient, private cookieService: CookieServiceService, private toastService: HotToastService, private router: Router) { }
 

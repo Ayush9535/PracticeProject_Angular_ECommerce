@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieServiceService } from '../CookieService/cookie-service.service';
+import { environment } from '../../../environments/environment';
 
 interface Transaction {
   orderId: string;
@@ -28,18 +29,18 @@ export class OrderServiceService {
     }
 
   public createTransaction(amount: Number){
-    return this.http.post<Transaction>(`http://localhost:8080/createTransaction`, {"amount": amount} , { headers: this.getHeaders()})
+    return this.http.post<Transaction>(`${environment.apiUrl}/createTransaction`, {"amount": amount} , { headers: this.getHeaders()})
   }
 
   public addOrder(order: any){
-    return this.http.post(`http://localhost:8080/addOrder`, order, { headers: this.getHeaders()})
+    return this.http.post(`${environment.apiUrl}/addOrder`, order, { headers: this.getHeaders()})
   }
 
   public getOrders(){
-    return this.http.get(`http://localhost:8080/getOrders`, { headers: this.getHeaders()})
+    return this.http.get(`${environment.apiUrl}/getOrders`, { headers: this.getHeaders()})
   }
 
   public getOrder(orderId: string){
-    return this.http.get(`http://localhost:8080/getOrder/${orderId}`, { headers: this.getHeaders()})
+    return this.http.get(`${environment.apiUrl}/getOrder/${orderId}`, { headers: this.getHeaders()})
   }
 }
