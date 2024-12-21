@@ -24,6 +24,7 @@ export class AllProductsComponent {
   paginatedProducts: any[] = [];
   currentPage: number = 1;
   pageSize: number = 50;
+  loading: boolean = true; // <-- Add this variable to track loading state
 
   constructor(
     private CartSvc: CartserviceService, 
@@ -33,16 +34,24 @@ export class AllProductsComponent {
   ) {}
 
   ngOnInit() {
+    this.loading = true; // Start loader
     this.route.paramMap.subscribe(params => {
       this.productType = params.get('type') || '';
-      this.productSvc.getProductsByCategory(this.productType).subscribe((products) => {
-        this.products = products;
-        this.filteredProducts = [...this.products];
-        this.filterProducts();
-      });
-    });
 
-    
+      this.productSvc.getProductsByCategory(this.productType).subscribe(
+        (products) => {
+          this.products = products;
+          this.filteredProducts = [...this.products];
+          this.filterProducts();
+          this.loading = false; // Stop loader when data is loaded
+        },
+        (error) => {
+          console.error('Failed to fetch products:', error);
+          this.toastService.error('Failed to load products!');
+          this.loading = false; // Stop loader in case of error
+        }
+      );
+    });
   }
 
   filterProducts(): void {
@@ -66,10 +75,16 @@ export class AllProductsComponent {
 
   addToCartClicked(book: any) {
     console.log('Add to cart clicked:', book);
+    const loadingToast = this.toastService.loading('Please wait..!') 
     this.CartSvc.addToCart(book.id).subscribe((data) => {
-      console.log(data)
+      console.log('Add to cart response:', data)
+      loadingToast.close();
       this.toastService.success('Item added to cart');
-    });
+    }, (error) => {
+      console.error('Add to cart error:', error);
+      loadingToast.close();
+      this.toastService.error('Failed to add item to cart');
+    })
   }
 
   setSearchQuery(event: any) {
@@ -93,3 +108,4 @@ export class AllProductsComponent {
     this.updatePaginatedProducts();
   }
 }
+

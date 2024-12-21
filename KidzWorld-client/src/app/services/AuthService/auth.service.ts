@@ -19,9 +19,11 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    const loadingToast = this.toastService.loading('Logging in..!')
     this.signIn(email, password).subscribe(
       (response) => {
         console.log('Login response:', response);
+        loadingToast.close();
         this.toastService.success('Login Successful..!', {
           dismissible: true,
           duration: 2000
@@ -32,6 +34,7 @@ export class AuthService {
         }, 2000); 
       },
       (error) => {
+        loadingToast.close();
         this.toastService.error("Login Failed..!", {
           dismissible: true,
           duration: 2000
@@ -46,9 +49,11 @@ export class AuthService {
   }
 
   signup(username: string , email: string, password: string) {
+    const loadingToast = this.toastService.loading('Logging in..!')
     this.signUp(username, email, password).subscribe(
       (response) => {
         console.log('SingUp response:', response);
+        loadingToast.close();
         this.toastService.success('Account Created Successfully..!', {
           dismissible: true,
           duration: 1000
@@ -58,6 +63,7 @@ export class AuthService {
         }, 1000); 
       },
       (error) => {
+        loadingToast.close();
         this.toastService.error("SignUp Failed..!" , {
           dismissible: true,
           duration: 2000

@@ -7,13 +7,14 @@ import Address from '../interfaces/address';
 import { OrderServiceService } from '../services/OrderService/order-service.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RouterLink } from '@angular/router';
+import { LoaderComponent } from '../loader/loader.component';
 
 declare var Razorpay: any;
 @Component({
   selector: 'app-checkout',
   standalone: true,
   templateUrl: './checkout.component.html',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LoaderComponent
   ],
 })
 export class CheckoutComponent implements OnInit {
@@ -25,6 +26,12 @@ export class CheckoutComponent implements OnInit {
   disableSaveButton: boolean = false;
 
   shippingForm: FormGroup;
+
+  isLoadingCart: boolean = false;
+  isLoadingAddresses: boolean = false;
+  isProcessingPayment: boolean = false;
+  isSavingAddress: boolean = false;
+  isDeletingAddress: boolean = false;
 
   constructor(private fb: FormBuilder, private CartSvc: CartserviceService, private OrderSvc: OrderServiceService, private cd: ChangeDetectorRef, private toastSvc: HotToastService) {
     this.shippingForm = this.fb.group({
@@ -39,12 +46,28 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.CartSvc.getCart().subscribe((items) => {
-      this.cartItems = items;
+    this.isLoadingCart = true;
+    this.CartSvc.getCart().subscribe({
+      next: (items) => {
+        this.cartItems = items;
+        this.isLoadingCart = false;
+      },
+      error: () => {
+        this.isLoadingCart = false;
+        this.toastSvc.error('Error loading cart items');
+      }
     });
 
-    this.CartSvc.getSavedAddress().subscribe((addresses) => {
-      this.savedAddresses = addresses;
+    this.isLoadingAddresses = true;
+    this.CartSvc.getSavedAddress().subscribe({
+      next: (addresses) => {
+        this.savedAddresses = addresses;
+        this.isLoadingAddresses = false;
+      },
+      error: () => {
+        this.isLoadingAddresses = false;
+        this.toastSvc.error('Error loading saved addresses');
+      }
     });
 
     this.shippingForm.valueChanges.subscribe(() => {
@@ -79,9 +102,18 @@ export class CheckoutComponent implements OnInit {
   }
 
   saveAddress() {
-    this.CartSvc.addSavedAddress(this.shippingForm.value).subscribe((response) => {
-      console.log('Address saved:', response);
-      this.savedAddresses.push(this.shippingForm.value);
+    this.isSavingAddress = true;
+    this.CartSvc.addSavedAddress(this.shippingForm.value).subscribe({
+      next: (response) => {
+        console.log('Address saved:', response);
+        this.savedAddresses.push(this.shippingForm.value);
+        this.isSavingAddress = false;
+        this.toastSvc.success('Address saved successfully');
+      },
+      error: () => {
+        this.isSavingAddress = false;
+        this.toastSvc.error('Error saving address');
+      }
     });
   }
 
@@ -91,33 +123,47 @@ export class CheckoutComponent implements OnInit {
   }
 
   removeSavedAddress(address: Address) {
-    this.CartSvc.removeSavedAddress(address).subscribe((response) => {
-      console.log('Address removed:', response);
-      this.savedAddresses = this.savedAddresses.filter((addr) => addr !== address);
+    this.isDeletingAddress = true;
+    this.CartSvc.removeSavedAddress(address).subscribe({
+      next: (response) => {
+        console.log('Address removed:', response);
+        this.savedAddresses = this.savedAddresses.filter((addr) => addr !== address);
+        this.isDeletingAddress = false;
+        this.toastSvc.success('Address removed successfully');
+      },
+      error: () => {
+        this.isDeletingAddress = false;
+        this.toastSvc.error('Error removing address');
+      }
     });
   }
 
   createTransaction() {
+    this.isProcessingPayment = true;
     const total = this.calculateTotal();
-    this.OrderSvc.createTransaction(total).subscribe(
-      (response) => {
-      console.log('Transaction created:', response);
-      this.openTrasactionModal(response);
-      }, (error) => {
+    this.OrderSvc.createTransaction(total).subscribe({
+      next: (response) => {
+        console.log('Transaction created:', response);
+        this.isProcessingPayment = false;
+        this.openTrasactionModal(response);
+      },
+      error: (error) => {
         console.error('Error creating transaction:', error);
+        this.isProcessingPayment = false;
+        this.toastSvc.error('Error processing payment');
       }
-    )
+    });
   }
 
   openTrasactionModal(response: any) {
     var options = {
       order_id: response.orderId,
       key: response.key,
-      amount : response.amount,
+      amount: response.amount,
       currency: response.currency,
       name: "KidzWorld",
       description: "Payment for your order",
-      handler: (response : any)=>{
+      handler: (response: any) => {
         this.processResponse(response);
       },
       prefill: {
@@ -140,7 +186,7 @@ export class CheckoutComponent implements OnInit {
     rzp1.open();
   }
 
-  processResponse(response: any) {    
+  processResponse(response: any) {
     this.orderId = response.razorpay_order_id;
 
     const order = {

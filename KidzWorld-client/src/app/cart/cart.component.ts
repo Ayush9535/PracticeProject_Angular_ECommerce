@@ -18,14 +18,17 @@ export class CartComponent {
   subtotal: number = 0;
   total: number = 0;
   totalItems: number = 0;
+  loading: boolean = true;
 
   constructor(private Cartsvc: CartserviceService) {}
 
   ngOnInit() {
+    this.loading = true;
     this.Cartsvc.getCart().subscribe((items: CartItem[]) => {
       this.cartItems = items;
       console.log(this.cartItems);
       this.updateTotal();
+      this.loading = false;
     });
   }
 

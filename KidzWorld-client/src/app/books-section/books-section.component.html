@@ -1,5 +1,13 @@
-<div class="px-20 w-full flex flex-col justify-center items-center">
+<!-- Loader -->
+<div *ngIf="loading" class="flex justify-center items-center w-full h-[70vh]">
+  <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+</div>
+
+<!-- Main Content -->
+<div *ngIf="!loading" class="px-20 w-full flex flex-col justify-center items-center">
   <h2 class="self-start text-2xl my-5 font-medium">Discover New Books</h2>
+
+  <!-- Books Grid -->
   <div class="grid grid-cols-6 content-center w-full">
     <div *ngFor="let book of books" class="w-full gap-3">
       <div>
@@ -17,5 +25,8 @@
       </div>
     </div>
   </div>
-  <h2 class="self-end p-2 px-2 text-md bg-blue-500 rounded-md text-white w-fit mt-10 mr-6 cursor-pointer" [routerLink]="['/products', 'books']">Explore More</h2>
+
+  <!-- Explore More Button -->
+  <h2 class="self-end p-2 px-2 text-md bg-blue-500 rounded-md text-white w-fit mt-10 mr-6 cursor-pointer" 
+      [routerLink]="['/products', 'books']">Explore More</h2>
 </div>

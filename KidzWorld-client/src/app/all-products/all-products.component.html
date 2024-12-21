@@ -1,85 +1,49 @@
-<div class="mt-10 px-20 w-full flex flex-col justify-center items-center">
-    <h2 class="self-center text-2xl my-5 font-medium">Discover ALL {{productType.toLocaleUpperCase()}}</h2>
+<!-- Loader -->
+<div *ngIf="loading" class="flex justify-center items-center w-full h-[70vh]">
+  <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+</div>
 
-    <!-- Filters Section -->
-    <div class="flex justify-between items-center w-full my-5">
-        <div class="flex items-center gap-4 ml-[40px]">
-            <label for="priceRange" class="text-md font-medium">Filter by Price:</label>
-            <select id="priceRange"
-                class="border px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                (change)="setPriceFilter($event)">
-                <option value="">All</option>
-                <option value="low">Low (Below $10)</option>
-                <option value="medium">Medium ($10 - $15)</option>
-                <option value="high">High (Above $15)</option>
-            </select>
-        </div>
-        <input type="text" placeholder="Search by title"
-            class="border px-4 py-2 rounded-md w-[300px] focus:outline-none focus:ring focus:ring-blue-300 mr-[40px]"
-            (input)="setSearchQuery($event)" />
-    </div>
+<!-- Main Content -->
+<div *ngIf="!loading" class="mt-10 px-20 w-full flex flex-col justify-center items-center">
+  <h2 class="self-center text-2xl my-5 font-medium">Discover ALL {{productType.toLocaleUpperCase()}}</h2>
 
-    <!-- Products Grid -->
-    <div class="grid grid-cols-5 content-center w-full gap-y-28">
-        <div *ngFor="let item of paginatedProducts" class="w-full gap-3 mx-[40px]">
-            <div>
-                <img class="books w-[200px] h-[300px] object-cover" src="{{item.imgUrl}}" alt="" />
-                <h3 class="text-xl font-medium px-1 py-2 text-ellipsis overflow-hidden whitespace-nowrap w-[200px]">
-                    {{item.title}}
-                </h3>
-                <h4 class="text-md mb-3 px-1 text-gray-400">{{item.description}}</h4>
-            </div>
-            <div class="flex justify-between items-center px-1 w-[200px]">
-                <h4 class="text-lg font-semibold">${{item.price}}</h4>
-                <div id="book1"
-                    class="bg-blue-500 rounded-md flex justify-evenly items-center gap-1 p-1 px-2 text-white cursor-pointer"
-                    (click)="addToCartClicked(item)">
-                    <h6 class="font-bold">Add</h6>
-                    <img src="/assets/cart-icon-white.png" alt="" width="20px" class="h-[20px]" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex justify-center mt-10 items-center space-x-4">
-        <button
-          class="px-5 py-2 rounded-lg transition-all duration-300 
-                 bg-white text-gray-700 border border-gray-300 
-                 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-500 
-                 focus:outline-none focus:ring-2 focus:ring-blue-300 
-                 disabled:opacity-50 disabled:cursor-not-allowed 
-                 disabled:hover:bg-white disabled:hover:text-gray-700 
-                 disabled:hover:border-gray-300 
-                 flex items-center gap-2"
-          [disabled]="currentPage === 1"
-          (click)="changePage(currentPage - 1)"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-          Previous
-        </button>
-        
-        <span class="text-gray-600 font-medium px-4 py-2 bg-gray-100 rounded-lg">
-          Page {{currentPage}}
-        </span>
-        
-        <button
-          class="px-5 py-2 rounded-lg transition-all duration-300 
-                 bg-white text-gray-700 border border-gray-300 
-                 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-500 
-                 focus:outline-none focus:ring-2 focus:ring-blue-300 
-                 disabled:opacity-50 disabled:cursor-not-allowed 
-                 disabled:hover:bg-white disabled:hover:text-gray-700 
-                 disabled:hover:border-gray-300 
-                 flex items-center gap-2"
-          [disabled]="currentPage >= products.length / pageSize"
-          (click)="changePage(currentPage + 1)"
-        >
-          Next
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+  <!-- Filters Section -->
+  <div class="flex justify-between items-center w-full my-5">
+      <div class="flex items-center gap-4 ml-[40px]">
+          <label for="priceRange" class="text-md font-medium">Filter by Price:</label>
+          <select id="priceRange"
+              class="border px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+              (change)="setPriceFilter($event)">
+              <option value="">All</option>
+              <option value="low">Low (Below $10)</option>
+              <option value="medium">Medium ($10 - $15)</option>
+              <option value="high">High (Above $15)</option>
+          </select>
       </div>
+      <input type="text" placeholder="Search by title"
+          class="border px-4 py-2 rounded-md w-[300px] focus:outline-none focus:ring focus:ring-blue-300 mr-[40px]"
+          (input)="setSearchQuery($event)" />
+  </div>
+
+  <!-- Products Grid -->
+  <div class="grid grid-cols-5 content-center w-full gap-y-28">
+      <div *ngFor="let item of paginatedProducts" class="w-full gap-3 mx-[40px]">
+          <div>
+              <img class="books w-[200px] h-[300px] object-cover" src="{{item.imgUrl}}" alt="" />
+              <h3 class="text-xl font-medium px-1 py-2 text-ellipsis overflow-hidden whitespace-nowrap w-[200px]">
+                  {{item.title}}
+              </h3>
+              <h4 class="text-md mb-3 px-1 text-gray-400">{{item.description}}</h4>
+          </div>
+          <div class="flex justify-between items-center px-1 w-[200px]">
+              <h4 class="text-lg font-semibold">${{item.price}}</h4>
+              <div id="book1"
+                  class="bg-blue-500 rounded-md flex justify-evenly items-center gap-1 p-1 px-2 text-white cursor-pointer"
+                  (click)="addToCartClicked(item)">
+                  <h6 class="font-bold">Add</h6>
+                  <img src="/assets/cart-icon-white.png" alt="" width="20px" class="h-[20px]" />
+              </div>
+          </div>
+      </div>
+  </div>
 </div>

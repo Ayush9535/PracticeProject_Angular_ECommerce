@@ -12,6 +12,7 @@ import { OrderServiceService } from '../services/OrderService/order-service.serv
 })
 export class OrderDetailsComponent implements OnInit {
   order: any = {};
+  loading: boolean = true;
 
   constructor(
     private orderSvc: OrderServiceService,
@@ -19,12 +20,14 @@ export class OrderDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     const orderNumber = this.route.snapshot.paramMap.get('orderNumber');
     console.log(orderNumber);
     if (orderNumber) {
       this.orderSvc.getOrder(orderNumber).subscribe((data: any) => {
         this.order = data;
         console.log(this.order);
+        this.loading = false;
       });
     }
   }
