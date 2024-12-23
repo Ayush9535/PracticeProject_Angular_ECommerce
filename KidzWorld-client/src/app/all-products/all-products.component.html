@@ -29,7 +29,7 @@
   <div class="grid grid-cols-5 content-center w-full gap-y-28">
       <div *ngFor="let item of paginatedProducts" class="w-full gap-3 mx-[40px]">
           <div>
-              <img class="books w-[200px] h-[300px] object-cover" src="{{item.imgUrl}}" alt="" />
+              <img class="books w-[200px] h-[300px] object-cover" [src]="item.imgUrl" alt="" />
               <h3 class="text-xl font-medium px-1 py-2 text-ellipsis overflow-hidden whitespace-nowrap w-[200px]">
                   {{item.title}}
               </h3>
