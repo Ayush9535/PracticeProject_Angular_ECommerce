@@ -15,7 +15,7 @@ import { HotToastService } from '@ngneat/hot-toast';
   styleUrl: './all-products.component.css'
 })
 export class AllProductsComponent {
-
+  Math = Math;
   products: Product[] = [];
   productType: string = "";
   filteredProducts: any[] = []; 

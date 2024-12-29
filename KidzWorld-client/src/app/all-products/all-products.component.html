@@ -1,49 +1,99 @@
 <!-- Loader -->
 <div *ngIf="loading" class="flex justify-center items-center w-full h-[70vh]">
-  <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-</div>
-
-<!-- Main Content -->
-<div *ngIf="!loading" class="mt-10 px-20 w-full flex flex-col justify-center items-center">
-  <h2 class="self-center text-2xl my-5 font-medium">Discover ALL {{productType.toLocaleUpperCase()}}</h2>
-
-  <!-- Filters Section -->
-  <div class="flex justify-between items-center w-full my-5">
-      <div class="flex items-center gap-4 ml-[40px]">
-          <label for="priceRange" class="text-md font-medium">Filter by Price:</label>
-          <select id="priceRange"
-              class="border px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-              (change)="setPriceFilter($event)">
-              <option value="">All</option>
-              <option value="low">Low (Below $10)</option>
-              <option value="medium">Medium ($10 - $15)</option>
-              <option value="high">High (Above $15)</option>
-          </select>
-      </div>
-      <input type="text" placeholder="Search by title"
-          class="border px-4 py-2 rounded-md w-[300px] focus:outline-none focus:ring focus:ring-blue-300 mr-[40px]"
-          (input)="setSearchQuery($event)" />
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
   </div>
-
-  <!-- Products Grid -->
-  <div class="grid grid-cols-5 content-center w-full gap-y-28">
-      <div *ngFor="let item of paginatedProducts" class="w-full gap-3 mx-[40px]">
-          <div>
-              <img class="books w-[200px] h-[300px] object-cover" [src]="item.imgUrl" alt="" />
-              <h3 class="text-xl font-medium px-1 py-2 text-ellipsis overflow-hidden whitespace-nowrap w-[200px]">
-                  {{item.title}}
-              </h3>
-              <h4 class="text-md mb-3 px-1 text-gray-400">{{item.description}}</h4>
-          </div>
-          <div class="flex justify-between items-center px-1 w-[200px]">
-              <h4 class="text-lg font-semibold">${{item.price}}</h4>
-              <div id="book1"
-                  class="bg-blue-500 rounded-md flex justify-evenly items-center gap-1 p-1 px-2 text-white cursor-pointer"
-                  (click)="addToCartClicked(item)">
-                  <h6 class="font-bold">Add</h6>
-                  <img src="/assets/cart-icon-white.png" alt="" width="20px" class="h-[20px]" />
-              </div>
-          </div>
+  
+  <!-- Main Content -->
+  <div *ngIf="!loading" class="mt-10 px-4 sm:px-8 md:px-12 lg:px-20 w-full flex flex-col justify-center items-center">
+    <h2 class="self-center md:self-start text-4xl md:text-2xl my-3 sm:my-5 font-medium">Discover ALL {{productType.toLocaleUpperCase()}}</h2>
+    
+    <!-- Filters Section -->
+    <div class="flex flex-col sm:flex-row justify-between items-center w-full my-5 gap-4 sm:gap-0">
+      <div class="flex items-center gap-4">
+        <label for="priceRange" class="text-md font-medium">Filter by Price:</label>
+        <select id="priceRange"
+          class="border px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          (change)="setPriceFilter($event)">
+          <option value="">All</option>
+          <option value="low">Low (Below $10)</option>
+          <option value="medium">Medium ($10 - $15)</option>
+          <option value="high">High (Above $15)</option>
+        </select>
       </div>
+      <input type="text" 
+        placeholder="Search by title"
+        class="border px-4 py-2 rounded-md w-full sm:w-[300px] focus:outline-none focus:ring focus:ring-blue-300"
+        (input)="setSearchQuery($event)" />
+    </div>
+  
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 content-center w-full gap-y-28">
+      <div *ngFor="let book of paginatedProducts" class="w-full flex flex-col items-center justify-center gap-3">
+        <div class="flex flex-col items-center sm:items-start">
+          <img
+            class="books w-60 sm:w-60 md:w-51 lg:w-43 xl:w-51 object-cover"
+            [src]="book.imgUrl"
+            alt="book cover"
+          />
+          <h3 class="text-2xl sm:text-2xl lg:text-xl font-medium px-1 text-ellipsis overflow-hidden whitespace-nowrap w-60 sm:w-40 md:w-48 lg:w-40 xl:w-48">
+            {{book.title}}
+          </h3>
+          <h4 class="text-sm sm:text-md mb-3 px-1 text-gray-600 w-50 sm:w-40 md:w-48 lg:w-40 xl:w-48">
+            {{book.description}}
+          </h4>
+        </div>
+        <div class="flex justify-between items-center px-1 w-60 xl:w-52">
+          <h4 class="text-2xl sm:text-2xl lg:text-xl font-semibold">${{book.price}}</h4>
+          <div
+            class="bg-blue-500 rounded-md flex justify-evenly items-center gap-1 p-1 px-2 text-white cursor-pointer hover:bg-blue-600 transition-colors"
+            (click)="addToCartClicked(book)"
+          >
+            <h6 class="font-bold text-xl sm:text-base">Add</h6>
+            <img
+              src="/assets/cart-icon-white.png"
+              alt="cart icon"
+              class="w-4 sm:w-5 h-4 sm:h-5"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Pagination -->
+    <div class="flex justify-center items-center gap-2 my-8 w-full">
+      <!-- Previous Button -->
+      <button 
+        (click)="changePage(currentPage - 1)" 
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200
+          disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
+          enabled:bg-white enabled:text-blue-600 enabled:border enabled:border-blue-600 enabled:hover:bg-blue-50"
+      >
+        Previous
+      </button>
+  
+      <!-- Page Numbers -->
+      <div class="flex gap-1">
+        <button *ngFor="let page of [].constructor(Math.ceil(filteredProducts.length / pageSize)); let i = index"
+          (click)="changePage(i + 1)"
+          class="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+          [ngClass]="currentPage === i + 1 ? 
+            'bg-blue-600 text-white' : 
+            'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50'"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+  
+      <!-- Next Button -->
+      <button 
+        (click)="changePage(currentPage + 1)" 
+        [disabled]="currentPage === Math.ceil(filteredProducts.length / pageSize)"
+        class="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200
+          disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed
+          enabled:bg-white enabled:text-blue-600 enabled:border enabled:border-blue-600 enabled:hover:bg-blue-50"
+      >
+        Next
+      </button>
+    </div>
   </div>
-</div>

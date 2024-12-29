@@ -163,6 +163,7 @@ h2 {
 
 .herosection{
   background-image: url("/assets/kw-background.png");
+  background-position: center;
   background-size: 100% 100%;
   color: white;
 }

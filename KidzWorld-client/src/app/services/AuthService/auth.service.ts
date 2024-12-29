@@ -22,7 +22,7 @@ export class AuthService {
     const loadingToast = this.toastService.loading('Logging in..!')
     this.signIn(email, password).subscribe(
       (response) => {
-        console.log('Login response:', response);
+        // console.log('Login response:', response);
         loadingToast.close();
         this.toastService.success('Login Successful..!', {
           dismissible: true,
@@ -35,7 +35,7 @@ export class AuthService {
       },
       (error) => {
         loadingToast.close();
-        this.toastService.error("Login Failed..!", {
+        this.toastService.error(error.error.message, {
           dismissible: true,
           duration: 2000
         })
@@ -49,26 +49,26 @@ export class AuthService {
   }
 
   signup(username: string , email: string, password: string) {
-    const loadingToast = this.toastService.loading('Logging in..!')
+    const loadingToast = this.toastService.loading(' Creating Account..!')
     this.signUp(username, email, password).subscribe(
       (response) => {
-        console.log('SingUp response:', response);
+        // console.log('SingUp response:', response);
         loadingToast.close();
         this.toastService.success('Account Created Successfully..!', {
           dismissible: true,
           duration: 1000
         })
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/signin']);
         }, 1000); 
       },
       (error) => {
         loadingToast.close();
-        this.toastService.error("SignUp Failed..!" , {
+        this.toastService.error(error.error.message , {
           dismissible: true,
           duration: 2000
         })
-        console.error('Login failed', error);
+        console.error('register failed', error);
       }
     );
   }
