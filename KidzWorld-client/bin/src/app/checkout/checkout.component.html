@@ -1,0 +1,137 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Checkout Stepper -->
+  <div class="flex justify-between mb-8 w-[50%] m-auto">
+    <div *ngFor="let step of steps; let i = index"
+      class="flex-1 text-center py-2 px-4 {{ currentStep > i ? 'bg-green-500 text-white' : currentStep == i ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+      {{ step }}
+    </div>
+  </div>
+
+  <!-- Order Review Step -->
+  <div *ngIf="currentStep === 0" class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-6">Order Review</h2>
+    <div *ngFor="let item of cartItems" class="flex justify-between items-center border-b py-4">
+      <div>
+        <p class="font-semibold">{{ item.product.title }}</p>
+        <p>Quantity: {{ item.quantity }}</p>
+      </div>
+      <p>${{ (item.product.price * item.quantity) }}</p>
+    </div>
+    <div class="mt-6 text-right">
+      <p class="text-xl font-bold">Total: ${{ calculateTotal() }}</p>
+      <button (click)="nextStep()" class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+        Proceed to Shipping
+      </button>
+    </div>
+  </div>
+
+  <!-- Shipping Address Step -->
+  <div *ngIf="currentStep === 1" class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-6">Shipping Address</h2>
+
+    <!-- Saved Addresses Section -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold mb-4">Saved Addresses</h3>
+      <div *ngIf="savedAddresses.length > 0; else noSavedAddresses">
+        <div *ngFor="let address of savedAddresses; let i = index" class="border p-4 mb-4 rounded">
+          <p class="font-semibold">{{ address.fullName }}</p>
+          <p>{{ address.addressLine1 }}</p>
+          <p *ngIf="address.addressLine2">{{ address.addressLine2 }}</p>
+          <p>{{ address.city }}, {{ address.state }} - {{ address.zipCode }}</p>
+          <p>{{ address.country }}</p>
+          <button (click)="useSavedAddress(address)"
+            class="mt-2 bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700">
+            Use this Address
+          </button>
+          <button (click)="removeSavedAddress(address)"
+            class="mt-2 bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700 ml-2">
+            Remove Address
+          </button>
+        </div>
+      </div>
+      <ng-template #noSavedAddresses>
+        <p class="text-gray-600">No saved addresses available.</p>
+      </ng-template>
+    </div>
+
+    <!-- Shipping Address Form -->
+    <form (ngSubmit)="submitShippingAddress($event)" [formGroup]="shippingForm" novalidate>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input formControlName="fullName" placeholder="Full Name" class="w-full p-2 border rounded" />
+        <input formControlName="addressLine1" placeholder="Address Line 1" class="w-full p-2 border rounded" />
+        <input formControlName="addressLine2" placeholder="Address Line 2 (Optional)"
+          class="w-full p-2 border rounded" />
+        <input formControlName="city" placeholder="City" class="w-full p-2 border rounded" />
+        <input formControlName="state" placeholder="State" class="w-full p-2 border rounded" />
+        <input formControlName="zipCode" placeholder="Zip Code" class="w-full p-2 border rounded" />
+        <input formControlName="country" placeholder="Country" class="w-full p-2 border rounded" />
+      </div>
+
+      <!-- Save Address Button -->
+      <button (click)="saveAddress()" type="button"
+        class="mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 disabled:opacity-50"
+        [disabled]="disableSaveButton">
+        Save Address
+      </button>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between mt-6">
+        <button type="button" (click)="prevStep()"
+          class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400">
+          Back
+        </button>
+        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50">
+          Continue to Payment
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Order Placed Step -->
+  <div *ngIf="currentStep === 2" class="bg-white shadow-md rounded-lg p-6 text-center">
+    <div class="mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h2 class="text-3xl font-bold text-green-600 mt-4">Order Placed Successfully!</h2>
+    </div>
+
+    <div class="bg-gray-100 p-6 rounded-lg mb-6">
+      <h3 class="text-xl font-semibold mb-4">Order Details</h3>
+      <div class="text-left">
+        <p class="mb-2"><strong>Order Number:</strong> {{orderId}}</p>
+        <p class="mb-2"><strong>Customer Name: </strong> {{shippingForm.value.fullName}}</p>
+        <p class="mb-2"><strong>Shipping Address:</strong> 
+          {{ shippingForm.value.addressLine1 }}
+          {{ shippingForm.value.addressLine2 ? ', ' + shippingForm.value.addressLine2 : '' }}, 
+          {{ shippingForm.value.city }}, 
+          {{ shippingForm.value.state }} 
+          {{ shippingForm.value.zipCode }}, 
+          {{ shippingForm.value.country }}
+        </p>
+        <p class="mb-2"><strong>Payment Mode:</strong> Online</p>
+        <p class="mb-2"><strong>Estimated Delivery:</strong> 4-5 Business Days</p>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
+      <div *ngFor="let item of cartItems" class="flex justify-between items-center border-b py-2 text-left">
+        <div>
+          <p class="font-semibold">{{ item.product.title }}</p>
+          <p>Quantity: {{ item.quantity }}</p>
+        </div>
+        <p>${{ (item.product.price * item.quantity) }}</p>
+      </div>
+      <div class="text-right mt-4">
+        <p class="text-xl font-bold">Total: ${{ calculateTotal() }}</p>
+      </div>
+    </div>
+
+    <div class="flex justify-center space-x-4">
+      <button routerLink="/home" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+        Return to Home
+      </button>
+    </div>
+  </div>
+</div>
