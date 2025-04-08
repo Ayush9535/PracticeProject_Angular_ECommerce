@@ -30,23 +30,19 @@ export class ProductserviceService {
   constructor(private http: HttpClient, private cookieSvc: CookieServiceService) { }
 
   getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/getProducts`, { headers: this.headers });
+    return this.http.get<Product[]>(`${this.apiUrl}/getProducts`);
   }
 
   getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/getProduct/${id}`, { headers: this.headers });
+    return this.http.get<Product>(`${this.apiUrl}/getProduct/${id}`);
   }
 
   getProductsByCategory(category: string): Observable<Product[]> {
     console.log(this.token)
-    return this.http.get<Product[]>(`${this.apiUrl}/getProducts/${category}`, {
-      headers: {
-        "Authorization": this.token ? `Bearer ${this.token}` : ''
-      }
-    });
+    return this.http.get<Product[]>(`${this.apiUrl}/getProducts/${category}`);
   }
 
   getLimitedProducts(limit: number): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/getLimitedProducts/${limit}`, { headers: this.headers });
+    return this.http.get<Product[]>(`${this.apiUrl}/getLimitedProducts/${limit}`);
   }
 }
