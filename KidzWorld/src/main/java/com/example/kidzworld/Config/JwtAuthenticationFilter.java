@@ -45,8 +45,9 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String requestURI = httpRequest.getRequestURI();
-
         if (isPublicPath(requestURI)) {
+            System.out.println(isPublicPath(requestURI));
+            System.out.println(requestURI);
             chain.doFilter(request, response);
             return;
         }

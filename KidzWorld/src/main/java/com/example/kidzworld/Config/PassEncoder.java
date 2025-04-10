@@ -28,7 +28,7 @@ public class PassEncoder {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/auth/login", "/auth/register").permitAll()
+                .requestMatchers("/auth/login", "/auth/register", "/getProducts/**", "/getProduct/**", "/getLimitedProducts/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore((Filter) jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

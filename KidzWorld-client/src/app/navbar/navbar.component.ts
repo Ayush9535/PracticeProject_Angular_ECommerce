@@ -25,9 +25,9 @@ export class NavbarComponent {
 
   ngOnInit(){
     this.loggedIn = this.cookieSvc.getCookie('JWT') ? true : false;
-    this.CartSvc.getCart().subscribe((cartItems) => {
-      this.totalCartItems = cartItems.length;
-    });
+    // this.CartSvc.getCart().subscribe((cartItems) => {
+    //   this.totalCartItems = cartItems.length;
+    // });
   }
 
   logout(){
