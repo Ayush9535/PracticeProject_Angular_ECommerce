@@ -38,16 +38,16 @@ export class GamesSectionComponent {
 
   addToCartClicked(game: any) {
     console.log('Add to cart clicked:', game);
-    const loadingToast = this.toastService.loading('Please wait..!');
+    // const loadingToast = this.toastService.loading('Please wait..!');
     this.CartSvc.addToCart(game.id).subscribe(
       (data) => {
         console.log('Add to cart response:', data);
-        loadingToast.close();
+        // loadingToast.close();
         this.toastService.success('Item added to cart');
       },
       (error) => {
         console.error('Add to cart error:', error);
-        loadingToast.close();
+        // loadingToast.close();
         this.toastService.error('Failed to add item to cart');
       }
     );

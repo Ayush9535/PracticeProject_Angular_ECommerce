@@ -44,7 +44,6 @@ export class CartserviceService {
       this.router.navigate(['/signin']); // Redirect to login if not authenticated
       throw new Error('User not authenticated'); // Optionally throw an error
     }
-
     return this.http.post<CartResponse>(`${this.addToCartUrl}/${productId}`, {}, { headers: this.getHeaders() });
   }
 

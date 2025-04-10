@@ -39,16 +39,16 @@ export class HandmadeSectionComponent {
 
   addToCartClicked(item: any) {
     console.log('Add to cart clicked:', item);
-    const loadingToast = this.toastService.loading('Please wait..!');
+    // const loadingToast = this.toastService.loading('Please wait..!');
     this.CartSvc.addToCart(item.id).subscribe(
       (data) => {
         console.log('Add to cart response:', data);
-        loadingToast.close();
+        // loadingToast.close();
         this.toastService.success('Item added to cart');
       },
       (error) => {
         console.error('Add to cart error:', error);
-        loadingToast.close();
+        // loadingToast.close();
         this.toastService.error('Failed to add item to cart');
       }
     );
